@@ -1,0 +1,29 @@
+
+//Duty: 35 - batV: 2.55
+//cea877bb-1d63-4cf3-8c88-eccec0729234
+###
+POST http://localhost:2022/harvester/simulation
+Content-Type: application/json
+
+{
+  "devId": "asdasdasd",
+	"harvId": "SolarLightLoad",
+	"lowpwrI": 400,
+	"activeI": 715,
+	"duty":16,
+	"Vload": 5,
+  "devAvgI": null,
+	"batSOC": null,
+	"batV": 3.28,
+	"phIrr": 700,
+	"thThot": null,
+	"thTcold": null,
+	"thGrad": null,
+	"vibAcc": null,
+	"vibFreq": null
+}
+
+
+###
+
+GET http://localhost:2022/harvester/simulation/adb39a178c3f822d574bb45a182ee5d67e10f8fd

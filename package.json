@@ -1,0 +1,20 @@
+{
+  "name": "emeritusharvester",
+  "version": "1.0.0",
+  "description": "Emeritus Harvester caches the simulation results from DrHarvester",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "Ivan Zyrianoff",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "moongose": "^1.0.0",
+    "require-dir": "^1.2.0",
+    "axios": "^0.26.1",
+    "pino": "^7.10.0",
+    "pino-pretty": "^7.6.1"
+  }
+}

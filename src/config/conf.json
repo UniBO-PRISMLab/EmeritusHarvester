@@ -1,0 +1,16 @@
+{
+  "emeritus": {
+    "port": 2022
+  },
+  "drHarvester": {
+    "host": "137.204.57.93",
+    "port": 7739
+  },
+  "mongo": {
+    "host": "mongo",
+    "port": 27017,
+    "db": "drHarvester"
+  },
+  "requestInterval": 5,
+  "logLevel": "info"
+}

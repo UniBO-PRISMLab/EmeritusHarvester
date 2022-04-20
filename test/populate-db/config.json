@@ -1,0 +1,13 @@
+{
+  "mongo": {
+    "host": "localhost",
+    "port": 27017,
+    "db": "drHarvester"
+  },
+  "drHarvester": {
+    "host": "137.204.57.93",
+    "port": 7739
+  },
+  "requestInterval": 5,
+  "sensorType": "gas"
+}
