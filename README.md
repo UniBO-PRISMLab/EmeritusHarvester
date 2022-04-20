@@ -1,7 +1,7 @@
 [![Site: IoTPrismLab](https://img.shields.io/badge/site-IoT%20Prism%20Lab-blue)](http://iot-prism-lab.nws.cs.unibo.it/)
 
 
-# EmeritusHarvester
+# Emeritus Harvester
 
 Emeritus Harvester caches the simulation results from DrHarvester.
 
