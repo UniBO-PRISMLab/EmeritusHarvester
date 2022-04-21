@@ -23,7 +23,6 @@ services:
     #   ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
   emeritus:
-    build: .
-    #image: ivanzy/emeritus
+    image: ivanzy/emeritus
     ports:
       - "2022:2022"
