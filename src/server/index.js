@@ -13,6 +13,7 @@ const app = express();
 
 const connectMongo = async () => {
   try {
+    logger.info(`Connecting to MongoDB at ${db.url}`)
     await db.mongoose.connect(db.url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -28,6 +29,7 @@ const connectMongo = async () => {
 };
 
 module.exports.start = async () => {
+
   app.use(
     cors({
       origin: "*",

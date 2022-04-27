@@ -13,8 +13,8 @@ const start = async () => {
   /*   for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
     phIrr.push(crazyParameter); */
   for (let duty = 5; duty <= 100; duty += 5) duties.push(duty);
-  for (let battery = 2; battery <= 4.2; battery += 0.1)
-    if (!batteryLevels.includes(battery)) batteryLevels.push(battery);
+  //for (let battery = 2; battery <= 4.2; battery += 0.1)
+  //  if (!batteryLevels.includes(battery)) batteryLevels.push(battery);
   for (let duty of duties)
     for (let batteryLevel of batteryLevels) {
       try {
