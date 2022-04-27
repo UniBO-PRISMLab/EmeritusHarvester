@@ -1,0 +1,50 @@
+POST http://137.204.57.93:7739/harvester/simulation
+Content-Type: application/json
+
+{
+  "devId": "asdasdasd",
+	"harvId": "SolarLightLoad",
+	"lowpwrI": 400,
+	"activeI": 715,
+	"duty":0.5,
+	"Vload": 5,
+  "devAvgI": null,
+	"batSOC": null,
+	"batV": 3.75,
+	"phIrr": 700,
+	"thThot": null,
+	"thTcold": null,
+	"thGrad": null,
+	"vibAcc": null,
+	"vibFreq": null
+}
+
+################################
+
+
+GET http://137.204.57.93:7739/harvester/simulation/0f642067-6364-450d-91a0-e3b000643d44
+
+################################
+POST http://137.204.57.93:7739/harvester/simulation
+Content-Type: application/json
+
+{
+  "devId": "asdasdasd",
+	"harvId": "SolarLightLoad",
+	"lowpwrI": 400,
+	"activeI": 715,
+	"duty":0.1,
+	"Vload": 5,
+  "devAvgI": null,
+	"batSOC": null,
+	"batV": 3.75,
+	"phIrr": 700,
+	"thThot": null,
+	"thTcold": null,
+	"thGrad": null,
+	"vibAcc": null,
+	"vibFreq": null
+}
+########
+GET http://137.204.57.93:7739/harvester/simulation/f9ab4d4b-dd0f-485b-8ed0-44b8c5ba2a5f
+

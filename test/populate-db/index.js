@@ -6,12 +6,15 @@ const Simulation = db.simulations;
 const start = async () => {
   await models.connectMongo();
   const duties = [];
-  const batteryLevels = [0, 2.2, 2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 4.1];
+  const batteryLevels = [2.2, 2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 3.82, 4.1];
+
   const phIrr = [];
   const nonStoredInputs = [];
-  for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
-    phIrr.push(crazyParameter);
-  for (let duty = 0; duty <= 100; duty += 5) duties.push(duty);
+  /*   for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
+    phIrr.push(crazyParameter); */
+  for (let duty = 5; duty <= 100; duty += 5) duties.push(duty);
+  for (let battery = 2; battery <= 4.2; battery += 0.1)
+    if (!batteryLevels.includes(battery)) batteryLevels.push(battery);
   for (let duty of duties)
     for (let batteryLevel of batteryLevels) {
       try {
@@ -30,6 +33,7 @@ const saveSimulation = async (duty, batteryLevel) => {
   const simulationId = await utils.postSimulation(input);
   const simulation = await utils.getSimulationResult(simulationId);
   console.log('Simulation ended, hashing it and storing in db');
+  console.log(`duty:${duty} - lifetime: ${simulation.result.batlifeh}`);
   const hashedData = await utils.hashData(input, simulation);
   const simulationSchema = new Simulation(hashedData);
   const mongoRes = await simulationSchema.save(simulationSchema);

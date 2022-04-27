@@ -1,4 +1,4 @@
-const db = require("../src/models");
+const db = require("../../src/models");
 
 const connectMongo = async () => {
   try {
