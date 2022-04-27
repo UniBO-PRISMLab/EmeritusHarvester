@@ -1,0 +1,1 @@
+{"_id":"adb39a178c3f822d574bb45a182ee5d67e10f8fd","terminated":true,"result":{"devId":"asdasdasd","harvId":"SolarLightLoad","batState":0,"batlifeh":69.097,"tChargeh":-1,"dSOCrate":-0.724,"date":"20-Apr-2022 20:52:22","simStatus":0},"createdAt":{"$date":"2022-04-20T18:52:35.457Z"},"updatedAt":{"$date":"2022-04-20T18:52:35.457Z"},"__v":0}

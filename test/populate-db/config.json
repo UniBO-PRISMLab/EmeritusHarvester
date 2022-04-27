@@ -9,5 +9,5 @@
     "port": 7739
   },
   "requestInterval": 5,
-  "sensorType": "gas"
+  "sensorType": "shm"
 }
