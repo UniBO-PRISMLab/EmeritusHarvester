@@ -1,4 +1,5 @@
 const utils = require('./utils');
+const config = require('./config.json');
 const models = require('./model');
 const db = require('../../src/models');
 const Simulation = db.simulations;
@@ -6,21 +7,27 @@ const Simulation = db.simulations;
 const start = async () => {
   await models.connectMongo();
   const duties = [];
-  const batteryLevels = []; //[2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 3.82, 4.1];
+  let batteryLevels = []; //
 
   const phIrr = [];
   const nonStoredInputs = [];
   /*   for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
     phIrr.push(crazyParameter); */
-  for (let duty = 1; duty <= 100; duty += 1) duties.push(duty);
-  for (let battery = 200; battery <= 410; battery += 1) batteryLevels.push(battery / 100);
+  if (config.sensorType === 'gas') for (let duty = 10; duty <= 33; duty += 5) duties.push(duty);
+  if (config.sensorType === 'shm') for (let duty = 1; duty <= 100; duty += 1) duties.push(duty);
+  if (config.sensorType === 'shm')
+    for (let battery = 200; battery <= 410; battery += 1) batteryLevels.push(battery / 100);
+  if (config.sensorType === 'gas')
+    batteryLevels = [
+      2.2, 2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 3.82, 3.97, 4.1,
+    ];
   for (let batteryLevel of batteryLevels) {
     for (let duty of duties)
       try {
         //let isStored = await checkSimulation(duty, batteryLevel);
         // if (isStored) console.log(`Not stored: ${duty} - ${batteryLevel}`);
-        //await saveSimulation(duty, batteryLevel);
-        await fillDataBaseWithEstimatedValues(duty, batteryLevel);
+        if (config.sensorType === 'gas') await saveSimulation(duty, batteryLevel);
+        if (config.sensorType === 'shm') await fillDataBaseWithEstimatedValues(duty, batteryLevel);
       } catch (err) {
         console.error(err);
       }
