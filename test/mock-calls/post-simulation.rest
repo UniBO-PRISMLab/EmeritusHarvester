@@ -7,14 +7,14 @@ Content-Type: application/json
 
 {
   "devId": "asdasdasd",
-	"harvId": "SolarLightLoad",
+	"harvId": "SolarHeavyLoad",
 	"lowpwrI": 400,
 	"activeI": 715,
-	"duty":16,
+	"duty":5,
 	"Vload": 5,
   "devAvgI": null,
 	"batSOC": null,
-	"batV": 3.28,
+	"batV": 2.2,
 	"phIrr": 700,
 	"thThot": null,
 	"thTcold": null,
