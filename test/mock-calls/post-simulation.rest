@@ -10,11 +10,11 @@ Content-Type: application/json
 	"harvId": "SolarHeavyLoad",
 	"lowpwrI": 400,
 	"activeI": 715,
-	"duty":5,
+	"duty":25,
 	"Vload": 5,
   "devAvgI": null,
 	"batSOC": null,
-	"batV": 2.2,
+	"batV": 2.55,
 	"phIrr": 700,
 	"thThot": null,
 	"thTcold": null,
@@ -26,4 +26,26 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:2022/harvester/simulation/adb39a178c3f822d574bb45a182ee5d67e10f8fd
+GET http://localhost:2022/harvester/simulation/441c8746564234cf1e856432ca92f325209d340b
+
+###
+POST http://localhost:2022/harvester/simulation
+Content-Type: application/json
+
+{
+    "devId": "ClusterHead",
+    "harvId": "SolarHeavyLoad",
+    "lowpwrI": 400,
+    "activeI": 715,
+    "duty": 90,
+    "Vload": 5,
+    "devAvgI": null,
+    "batSOC": null,
+    "batV": 3.5,
+    "phIrr": 700,
+    "thThot": null,
+    "thTcold": null,
+    "thGrad": null,
+    "vibAcc": null,
+    "vibFreq": null
+}

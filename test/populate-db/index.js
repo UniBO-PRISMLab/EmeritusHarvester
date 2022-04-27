@@ -6,7 +6,7 @@ const Simulation = db.simulations;
 const start = async () => {
   await models.connectMongo();
   const duties = [];
-  const batteryLevels = [0, 2.2, 2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 4.1];
+  const batteryLevels = [0, 2.2, 2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 3.97, 4.1];
   const phIrr = [];
   const nonStoredInputs = [];
   for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
