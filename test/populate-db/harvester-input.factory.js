@@ -3,8 +3,8 @@ module.exports = (duty, batV, type = 'shm') => {
   if (type === 'shm')
     parameters = {
       lowpwrI: 400,
-      //activeI: 715,
-      activeI: 3500,
+      activeI: 715,
+      //activeI: 3500,
       Vload: 5,
       batV: batV,
       phIrr: 700,

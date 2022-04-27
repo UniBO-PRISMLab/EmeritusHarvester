@@ -6,28 +6,65 @@ const Simulation = db.simulations;
 const start = async () => {
   await models.connectMongo();
   const duties = [];
-  const batteryLevels = [2.2, 2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 3.82, 4.1];
+  const batteryLevels = []; //[2.55, 2.78, 2.85, 2.92, 3.06, 3.15, 3.28, 3.5, 3.62, 3.75, 3.82, 4.1];
 
   const phIrr = [];
   const nonStoredInputs = [];
   /*   for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
     phIrr.push(crazyParameter); */
-  for (let duty = 5; duty <= 100; duty += 5) duties.push(duty);
-  //for (let battery = 2; battery <= 4.2; battery += 0.1)
-  //  if (!batteryLevels.includes(battery)) batteryLevels.push(battery);
-  for (let duty of duties)
+  for (let duty = 1; duty <= 100; duty += 1) duties.push(duty);
+  for (let battery = 200; battery <= 410; battery += 1)
+    batteryLevels.push(battery/100);
     for (let batteryLevel of batteryLevels) {
-      try {
-        //let isStored = await checkSimulation(duty, batteryLevel);
-        // if (isStored) console.log(`Not stored: ${duty} - ${batteryLevel}`);
-        await saveSimulation(duty, batteryLevel);
-      } catch (err) {
-        console.error(err);
-      }
+      for (let duty of duties)
+        try {
+          //let isStored = await checkSimulation(duty, batteryLevel);
+          // if (isStored) console.log(`Not stored: ${duty} - ${batteryLevel}`);
+          //await saveSimulation(duty, batteryLevel);
+          await fillDataBaseWithEstimatedValues(duty, batteryLevel);
+        } catch (err) {
+          console.error(err);
+        }
     }
   console.log(nonStoredInputs);
 };
 
+const calculateSimulation = (duty, batteryLevel) => {
+  console.log(`duty: ${duty}, bat: ${batteryLevel}`);
+  let batSOC = (0.6279 * batteryLevel - 1.548) * 100;
+  if(batSOC > 100) batSOC = 100;
+  else if(batSOC < 0) batSOC = 0;
+
+  const misteriousData = -0.424 * 700 + (648 + 5.8 * duty);
+
+  const batlifeh = (3250 * (batSOC / 100)) / Math.abs(misteriousData);
+  console.log(`duty: ${duty}, bat: ${duty} batlifeh ${batlifeh}`);
+
+  return batlifeh;
+};
+
+const fillDataBaseWithEstimatedValues = async (duty, batteryLevel) => {
+  const input = utils.createInput(duty, batteryLevel);
+  const simulation = {
+    terminated: true,
+    result: {
+      devId: 'fake',
+      harvId: 'SolarHeavyLoad',
+      batState: 0,
+      batlifeh: calculateSimulation(duty, batteryLevel),
+      tChargeh: -1,
+      dSOCrate: -0.938,
+      date: '19-Apr-2022 23:41:47',
+      simStatus: 0,
+    },
+  };
+  const hashedData = await utils.hashData(input, simulation);
+  const simulationSchema = new Simulation(hashedData);
+  const mongoRes = await simulationSchema.save(simulationSchema);
+  console.log('Data Stored in DB');
+};
+
+module.exports = calculateSimulation;
 const saveSimulation = async (duty, batteryLevel) => {
   const input = utils.createInput(duty, batteryLevel);
   const simulationId = await utils.postSimulation(input);

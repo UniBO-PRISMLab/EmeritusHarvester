@@ -23,5 +23,5 @@ module.exports = (mongoose) => {
     return object;
   });
   //TODO: rename collection 'simulation'
-  return mongoose.model('simulations', schema);
+  return mongoose.model('analytical-simulation', schema);
 };

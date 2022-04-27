@@ -7,7 +7,6 @@ services:
     volumes:
       - ~/apps/mongo:/data/db
 
-
   mongo-express:
     image: mongo-express
     restart: always
@@ -16,10 +15,11 @@ services:
     depends_on:
       - mongo
     environment:
-       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
 
   emeritus:
-    image: ivanzy/emeritus:test
+    #image: ivanzy/emeritus:test
+    build: .
     links:
       - "mongo:mongo"
     ports:
