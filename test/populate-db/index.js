@@ -13,27 +13,26 @@ const start = async () => {
   /*   for (let crazyParameter = 50; crazyParameter <= 1000; crazyParameter += 50)
     phIrr.push(crazyParameter); */
   for (let duty = 1; duty <= 100; duty += 1) duties.push(duty);
-  for (let battery = 200; battery <= 410; battery += 1)
-    batteryLevels.push(battery/100);
-    for (let batteryLevel of batteryLevels) {
-      for (let duty of duties)
-        try {
-          //let isStored = await checkSimulation(duty, batteryLevel);
-          // if (isStored) console.log(`Not stored: ${duty} - ${batteryLevel}`);
-          //await saveSimulation(duty, batteryLevel);
-          await fillDataBaseWithEstimatedValues(duty, batteryLevel);
-        } catch (err) {
-          console.error(err);
-        }
-    }
+  for (let battery = 200; battery <= 410; battery += 1) batteryLevels.push(battery / 100);
+  for (let batteryLevel of batteryLevels) {
+    for (let duty of duties)
+      try {
+        //let isStored = await checkSimulation(duty, batteryLevel);
+        // if (isStored) console.log(`Not stored: ${duty} - ${batteryLevel}`);
+        //await saveSimulation(duty, batteryLevel);
+        await fillDataBaseWithEstimatedValues(duty, batteryLevel);
+      } catch (err) {
+        console.error(err);
+      }
+  }
   console.log(nonStoredInputs);
 };
 
 const calculateSimulation = (duty, batteryLevel) => {
   console.log(`duty: ${duty}, bat: ${batteryLevel}`);
   let batSOC = (0.6279 * batteryLevel - 1.548) * 100;
-  if(batSOC > 100) batSOC = 100;
-  else if(batSOC < 0) batSOC = 0;
+  if (batSOC > 100) batSOC = 100;
+  else if (batSOC < 0) batSOC = 0;
 
   const misteriousData = -0.424 * 700 + (648 + 5.8 * duty);
 
