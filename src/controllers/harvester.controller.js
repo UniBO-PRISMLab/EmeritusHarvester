@@ -21,6 +21,8 @@ exports.simulationPost = async (req, res) => {
     if (!(await isCached(job.jobId))) {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
       storeSimulation(req.body);
+    } else {
+      console.log('simulation found ' + job.jobId);
     }
     res.status(200).send(job);
   } catch (err) {
@@ -32,11 +34,15 @@ exports.simulationGet = async (req, res) => {
   const id = req.params.id;
   try {
     const mongoResponse = await Simulation.findById(id);
-    if (!mongoResponse)
+    if (!mongoResponse) {
       res.status(404).send({
         message: `Simulation ${id} not found`,
       });
-    else res.status(200).send(mongoResponse);
+    } else {
+      //console.log('mongo response');
+      //if (mongoResponse) console.log(mongoResponse);
+      res.status(200).send(mongoResponse);
+    }
   } catch (error) {
     logger.error(error);
     res.status(500).send({
@@ -47,14 +53,18 @@ exports.simulationGet = async (req, res) => {
 
 //TODO: move this to another file
 const storeSimulation = async (input) => {
+  console.log(input);
   try {
-    let simulation;
+    /*  let simulation;
     if (input.activeI === 715) {
-      simulation = calculateSimulation(input.duty, input.batV);
-    } else {
-      const simulationId = await drHarvesterClient.postSimulation(input);
-      simulation = await drHarvesterClient.getSimulationResult(simulationId);
-    }
+      console.log('ANALYTICAL SIMULATION');
+      simulation = await calculateSimulation(input.duty, input.batV);
+      console.log('simulation calculated:');
+      console.log(simulation);
+    } else { */
+    const simulationId = await drHarvesterClient.postSimulation(input);
+    const simulation = await drHarvesterClient.getSimulationResult(simulationId);
+    //}
     logger.info('Simulation ended, hashing it and storing in db');
     const hashedData = await hasher(input, simulation);
     const simulationSchema = new Simulation(hashedData);
@@ -80,14 +90,13 @@ const calculateBatteryyLifetime = (duty, batteryLevel) => {
 };
 
 const calculateSimulation = async (duty, batteryLevel) => {
-  const input = utils.createInput(duty, batteryLevel);
   const simulation = {
     terminated: true,
     result: {
       devId: 'fake',
       harvId: 'SolarHeavyLoad',
       batState: 0,
-      batlifeh: calculateBatteryyLifetime(duty, batteryLevel),
+      batlifeh: await calculateBatteryyLifetime(duty, batteryLevel),
       tChargeh: -1,
       dSOCrate: -0.938,
       date: '19-Apr-2022 23:41:47',
@@ -95,7 +104,6 @@ const calculateSimulation = async (duty, batteryLevel) => {
     },
   };
   return simulation;
-  console.log('Data Stored in DB');
 };
 
 const isCached = async (id) => Simulation.findById(id);

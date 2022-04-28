@@ -7,9 +7,11 @@ module.exports = (duty, batV, type = 'shm') => {
       Vload: 5,
       batV: batV,
       phIrr: 700,
+      harvId: 'SolarHeavyLoad',
     };
   else
     parameters = {
+      harvId: 'SolarLightLoad',
       lowpwrI: 0.003 * 1000, //3
       activeI: 0.01 * 1000, //10
       Vload: 3.3,
@@ -18,7 +20,7 @@ module.exports = (duty, batV, type = 'shm') => {
 
   return {
     devId: type,
-    harvId: 'SolarLightLoad',
+    harvId: parameters.harvId,
     lowpwrI: parameters.lowpwrI,
     activeI: parameters.activeI,
     duty: duty,
