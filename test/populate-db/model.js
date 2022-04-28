@@ -1,6 +1,7 @@
-const db = require("../src/models");
+const db = require("../../src/models");
 
 const connectMongo = async () => {
+  console.info("connecting to db at " + db.url);
   try {
     await db.mongoose.connect(db.url, {
       useNewUrlParser: true,

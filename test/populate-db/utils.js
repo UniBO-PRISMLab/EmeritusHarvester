@@ -5,12 +5,10 @@ const config = require('./config.json');
 const HarvesterInputFactory = require('./harvester-input.factory');
 const url = `http://${config.drHarvester.host}:${config.drHarvester.port}`;
 
-const createInput = (duty, batV = 3.82) => HarvesterInputFactory(duty, batV, config.sensorType);
+const createInput = (duty, batV) => HarvesterInputFactory(duty, batV, config.sensorType);
 
 const postSimulation = async (inputData) => {
-  console.log(
-    `Querying DrHarvester for a new simulation - Duty: ${inputData.duty} - batV: ${inputData.batV}`
-  );
+  console.log(`Querying DrHarvester for a new simulation - Duty: ${inputData.duty} - batV: ${inputData.batV}`);
   let { data } = await axios.post(`${url}/harvester/simulation`, inputData);
   console.info(`Simulation response: ${data.jobId}`);
   return data.jobId;
