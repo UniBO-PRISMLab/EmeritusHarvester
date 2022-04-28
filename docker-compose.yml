@@ -18,8 +18,8 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
 
   emeritus:
-    #image: ivanzy/emeritus:test
-    build: .
+    image: ivanzy/emeritus:demo
+    #build: .
     links:
       - "mongo:mongo"
     ports:
