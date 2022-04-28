@@ -48,8 +48,12 @@ exports.simulationGet = async (req, res) => {
 //TODO: move this to another file
 const storeSimulation = async (input) => {
   try {
-    const simulationId = await drHarvesterClient.postSimulation(input);
-    const simulation = await drHarvesterClient.getSimulationResult(simulationId);
+    if (input.activeI === 715) {
+      const simulation = {};
+    } else {
+      const simulationId = await drHarvesterClient.postSimulation(input);
+      const simulation = await drHarvesterClient.getSimulationResult(simulationId);
+    }
     logger.info('Simulation ended, hashing it and storing in db');
     const hashedData = await hasher(input, simulation);
     const simulationSchema = new Simulation(hashedData);
