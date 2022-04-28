@@ -1,0 +1,85 @@
+POST http://137.204.57.93:7739/harvester/simulation
+Content-Type: application/json
+
+{
+  "devId": "asdasdasd",
+	"harvId": "SolarLightLoad",
+	"lowpwrI": 400,
+	"activeI": 715,
+	"duty":0.5,
+	"Vload": 5,
+  "devAvgI": null,
+	"batSOC": null,
+	"batV": 3.75,
+	"phIrr": 700,
+	"thThot": null,
+	"thTcold": null,
+	"thGrad": null,
+	"vibAcc": null,
+	"vibFreq": null
+}
+
+################################
+
+
+GET http://137.204.57.93:7739/harvester/simulation/0f642067-6364-450d-91a0-e3b000643d44
+
+################################
+POST http://137.204.57.93:7739/harvester/simulation
+Content-Type: application/json
+
+{
+
+    "devId": "GasSensor",
+    "harvId": "SolarLightLoad",
+    "lowpwrI": 3,
+    "activeI": 10,
+    "duty": 40,
+    "Vload": 3.3,
+    "devAvgI": null,
+    "batSOC": null,
+    "batV": 3.75,
+    "phIrr": 700,
+    "thThot": null,
+    "thTcold": null,
+    "thGrad": null,
+    "vibAcc": null,
+    "vibFreq": null
+
+}
+
+########
+GET http://137.204.57.93:7739/harvester/simulation/b005646a-593d-4b3a-b417-4c20f6f3fc7c
+
+
+#### for batV 3.75 and duty 20
+{
+  "terminated": true,
+  "result": {
+    "devId": "GasSensor",
+    "harvId": "SolarLightLoad",
+    "batState": 1,
+    "batlifeh": -1.0,
+    "simStatus": 1,
+    "date": "28-Apr-2022 11:59:04",
+    "tChargeh": 20.955,
+    "dSOCrate": 0.477
+  }
+}
+
+
+#### for batV 2.55 and duty 20
+{
+  "terminated": true,
+  "result": {
+    "devId": "GasSensor",
+    "harvId": "SolarLightLoad",
+    "batState": 1,
+    "batlifeh": -1.0,
+    "simStatus": 1,
+    "date": "28-Apr-2022 12:11:05",
+    "tChargeh": 199.069,
+    "dSOCrate": 0.477
+  }
+}
+
