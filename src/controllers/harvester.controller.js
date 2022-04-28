@@ -48,11 +48,12 @@ exports.simulationGet = async (req, res) => {
 //TODO: move this to another file
 const storeSimulation = async (input) => {
   try {
+    let simulation;
     if (input.activeI === 715) {
-      const simulation = {};
+      simulation = calculateSimulation(input.duty, input.batV);
     } else {
       const simulationId = await drHarvesterClient.postSimulation(input);
-      const simulation = await drHarvesterClient.getSimulationResult(simulationId);
+      simulation = await drHarvesterClient.getSimulationResult(simulationId);
     }
     logger.info('Simulation ended, hashing it and storing in db');
     const hashedData = await hasher(input, simulation);
@@ -62,6 +63,39 @@ const storeSimulation = async (input) => {
   } catch (error) {
     console.log('DrHarvester Error ');
   }
+};
+
+const calculateBatteryyLifetime = (duty, batteryLevel) => {
+  console.log(`duty: ${duty}, bat: ${batteryLevel}`);
+  let batSOC = (0.6279 * batteryLevel - 1.548) * 100;
+  if (batSOC > 100) batSOC = 100;
+  else if (batSOC < 0) batSOC = 0;
+
+  const misteriousData = -0.424 * 700 + (648 + 5.8 * duty);
+
+  const batlifeh = (3250 * (batSOC / 100)) / Math.abs(misteriousData);
+  console.log(`duty: ${duty}, bat: ${duty} batlifeh ${batlifeh}`);
+
+  return batlifeh;
+};
+
+const calculateSimulation = async (duty, batteryLevel) => {
+  const input = utils.createInput(duty, batteryLevel);
+  const simulation = {
+    terminated: true,
+    result: {
+      devId: 'fake',
+      harvId: 'SolarHeavyLoad',
+      batState: 0,
+      batlifeh: calculateBatteryyLifetime(duty, batteryLevel),
+      tChargeh: -1,
+      dSOCrate: -0.938,
+      date: '19-Apr-2022 23:41:47',
+      simStatus: 0,
+    },
+  };
+  return simulation;
+  console.log('Data Stored in DB');
 };
 
 const isCached = async (id) => Simulation.findById(id);
