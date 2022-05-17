@@ -1,5 +1,7 @@
+const config = require('./config.json')
+
 module.exports = (duty, batV, irr) => {
-  if ('shm' === process.env.SENSOR_TYPE)
+  if ('shm' === config.sensorType)
     return {
       devId: 'ClusterHead',
       harvId: 'SolarHeavyLoad',

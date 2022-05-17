@@ -22,7 +22,7 @@ Content-Type: application/json
 ################################
 
 
-GET http://137.204.57.93:7739/harvester/simulation/0f642067-6364-450d-91a0-e3b000643d44
+GET http://137.204.57.93:7739/harvester/simulation/acb18218-1d5f-4180-950e-80219b27eca0
 
 ################################
 POST http://137.204.57.93:7739/harvester/simulation
@@ -49,7 +49,7 @@ Content-Type: application/json
 }
 
 ########
-GET http://137.204.57.93:7739/harvester/simulation/b005646a-593d-4b3a-b417-4c20f6f3fc7c
+GET http://137.204.57.93:7739/harvester/simulation/47c1527b-971f-4f67-a1fe-8d2f37a388f9
 
 
 #### for batV 3.75 and duty 20

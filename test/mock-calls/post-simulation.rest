@@ -26,7 +26,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:2022/harvester/simulation/441c8746564234cf1e856432ca92f325209d340b
+GET http://localhost:2022/harvester/simulation/fd80d17f18905ff32f6bb979f877260360b11c29
 
 ###
 POST http://localhost:2022/harvester/simulation
@@ -37,15 +37,70 @@ Content-Type: application/json
     "harvId": "SolarHeavyLoad",
     "lowpwrI": 400,
     "activeI": 715,
-    "duty": 90,
+    "duty": 20,
     "Vload": 5,
     "devAvgI": null,
     "batSOC": null,
-    "batV": 3.5,
+    "batV": "2.55",
     "phIrr": 700,
     "thThot": null,
     "thTcold": null,
     "thGrad": null,
     "vibAcc": null,
     "vibFreq": null
+}
+
+//de4bb2e592f5d52a37aaefd7ae885ec807996f2a
+
+################################
+POST http://localhost:2022/harvester/simulation/
+Content-Type: application/json
+
+{
+    "harvId": "SolarLightLoad",
+    "lowpwrI": 3,
+    "activeI": 10,
+    "duty": 20,
+    "Vload": 3.3,
+    "thThot": null,
+    "devAvgI": null,
+    "batSOC": null,
+    "phIrr": 700,
+    "thTcold": null,
+    "thGrad": null,
+    "vibAcc": null,
+    "vibFreq": null,
+    "batV": 3.15
+
+}
+
+//acb1a59cef38ddc3c3c0a68f23b14534e8012b90
+
+//bf72aa166c8f591e6b3c7c9602d8960e5516e149
+
+
+
+################################################################
+
+
+POST http://localhost:2022/harvester/simulation/hash
+Content-Type: application/json
+
+{
+
+"devId":"GasSensor",
+"harvId":"SolarLightLoad",
+"lowpwrI":3,
+"activeI":10,
+"duty":20,
+"Vload":3.3,
+"devAvgI":null,
+"batSOC":null,
+"batV":"3.15",
+"phIrr":700,
+"thThot":null,
+"thTcold":null,
+"thGrad":null,
+"vibAcc":null,
+"vibFreq":null
 }

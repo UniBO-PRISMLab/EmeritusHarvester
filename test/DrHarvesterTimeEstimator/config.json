@@ -8,6 +8,6 @@
     "host": "137.204.57.93",
     "port": 7739
   },
-  "requestInterval": 5,
+  "requestInterval": 0.1,
   "sensorType": "shm"
 }

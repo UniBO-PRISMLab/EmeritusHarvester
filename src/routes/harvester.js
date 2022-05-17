@@ -7,4 +7,7 @@ module.exports = (router) => {
   router.get("/simulation/:id", async (req, res, _next) =>
     harvesterController.simulationGet(req, res)
   );
+  router.post("/simulation/hash", async (req, res, _next) =>
+  harvesterController.simulationHash(req, res)
+);
 };

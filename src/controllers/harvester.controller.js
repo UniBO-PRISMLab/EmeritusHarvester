@@ -6,8 +6,9 @@ const Simulation = db.simulations;
 const drHarvesterClient = require('../client/drHarvester.client');
 const hasher = require('../utils/hasher');
 
+
 exports.simulationPost = async (req, res) => {
-  if (!req.body.devId) {
+  if (!req.body.harvId) {
     res.status(400).send({ message: 'Content can not be empty!' });
     return;
   }
@@ -22,8 +23,25 @@ exports.simulationPost = async (req, res) => {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
       storeSimulation(req.body);
     } else {
-      console.log('simulation found ' + job.jobId);
+      logger.info('simulation found: ' + job.jobId);
     }
+    res.status(200).send(job);
+  } catch (err) {
+    res.status(503).send({ error: err });
+  }
+};
+
+exports.simulationHash = async (req, res) => {
+  if (!req.body.harvId) {
+    res.status(400).send({ message: 'Content can not be empty!' });
+    return;
+  }
+
+  try {
+    const { devId, ...simulation } = req.body;
+    const job = {
+      jobId: hash(simulation),
+    };
     res.status(200).send(job);
   } catch (err) {
     res.status(503).send({ error: err });
@@ -53,22 +71,12 @@ exports.simulationGet = async (req, res) => {
 
 //TODO: move this to another file
 const storeSimulation = async (input) => {
-  console.log(input);
   try {
-    /*  let simulation;
-    if (input.activeI === 715) {
-      console.log('ANALYTICAL SIMULATION');
-      simulation = await calculateSimulation(input.duty, input.batV);
-      console.log('simulation calculated:');
-      console.log(simulation);
-    } else { */
     const simulationId = await drHarvesterClient.postSimulation(input);
     const simulation = await drHarvesterClient.getSimulationResult(simulationId);
-    //}
     logger.info('Simulation ended, hashing it and storing in db');
     const hashedData = await hasher(input, simulation);
     const simulationSchema = new Simulation(hashedData);
-    console.log(simulationSchema);
     await simulationSchema.save(simulationSchema);
   } catch (error) {
     console.log('DrHarvester Error ');
@@ -76,7 +84,7 @@ const storeSimulation = async (input) => {
 };
 
 const calculateBatteryyLifetime = (duty, batteryLevel) => {
-  console.log(`duty: ${duty}, bat: ${batteryLevel}`);
+  //console.log(`duty: ${duty}, bat: ${batteryLevel}`);
   let batSOC = (0.6279 * batteryLevel - 1.548) * 100;
   if (batSOC > 100) batSOC = 100;
   else if (batSOC < 0) batSOC = 0;

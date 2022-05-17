@@ -4,11 +4,9 @@ services:
   mongo:
     image: mongo:5.0
     restart: always
-    ports:
-      - 27017:27017
     volumes:
       - ~/apps/mongo:/data/db
-
+      
   mongo-express:
     image: mongo-express
     restart: always
@@ -16,15 +14,14 @@ services:
       - 8081:8081
     depends_on:
       - mongo
-  #   environment:
-  #     ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
+    environment:
+       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
 
-  # emeritus:
-  #   #image: ivanzy/emeritus:demo
-  #   build: .
-  #   links:
-  #     - "mongo:mongo"
-  #   ports:
-  #     - "2022:2022"
-  #   depends_on:
-  #     - mongo
+  emeritus:
+    image: ivanzy/emeritus:latest
+    links:
+      - "mongo:mongo"
+    ports:
+      - "2022:2022"
+    depends_on:
+      - mongo
