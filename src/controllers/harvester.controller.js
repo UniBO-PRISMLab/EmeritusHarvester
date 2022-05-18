@@ -13,7 +13,7 @@ exports.simulationPost = async (req, res) => {
   }
 
   try {
-    const { isCache, ...simulation } = req.body;
+    const { isCache, experimentName, ...simulation } = req.body;
     //const simulation = req.body;
     const job = {
       jobId: hash(simulation),
@@ -23,10 +23,10 @@ exports.simulationPost = async (req, res) => {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
       storeSimulation(req.body);
       console.log(simulation);
-      if (simulation.experimentName) recordFile(simulation.experimentName, 0);
+      if (experimentName) recordFile(experimentName, 0);
     } else {
       logger.info('simulation found: ' + job.jobId);
-      if (simulation.experimentName) recordFile(simulation.experimentName, 1);
+      if (experimentName) recordFile(experimentName, 1);
     }
     res.status(200).send(job);
   } catch (err) {
