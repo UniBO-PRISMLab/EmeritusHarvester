@@ -4,6 +4,8 @@ services:
   mongo:
     image: mongo:5.0
     restart: always
+    ports:
+      - 27017:27017
     #volumes:
       #- ~/apps/mongo:/data/db
       
@@ -17,15 +19,15 @@ services:
     environment:
        ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
 
-  emeritus:
-    #image: ivanzy/emeritus:latest
-    build: .
-    links:
-      - "mongo:mongo"
-    ports:
-      - "2022:2022"
-    depends_on:
-      - mongo
+  # emeritus:
+  #   #image: ivanzy/emeritus:latest
+  #   build: .
+  #   links:
+  #     - "mongo:mongo"
+  #   ports:
+  #     - "2022:2022"
+  #   depends_on:
+  #     - mongo
   # drharvester:
   #   #image: ivanzy/emeritus:latest
   #   build: ./DrHarvester
