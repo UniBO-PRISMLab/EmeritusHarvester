@@ -13,7 +13,8 @@ exports.simulationPost = async (req, res) => {
   }
 
   try {
-    const { devId, ...simulation } = req.body;
+    const { isCache, ...simulation } = req.body;
+    //const simulation = req.body;
     const job = {
       jobId: hash(simulation),
     };

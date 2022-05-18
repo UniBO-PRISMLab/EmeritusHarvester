@@ -6,7 +6,7 @@ POST http://localhost:2022/harvester/simulation
 Content-Type: application/json
 
 {
-  "devId": "asdasdasd",
+  "devId": "restre",
 	"harvId": "SolarHeavyLoad",
 	"lowpwrI": 400,
 	"activeI": 715,
@@ -26,8 +26,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:2022/harvester/simulation/f34852461eff847f4fe87bf9ec8cbe2ffe709d71
-
+GET http://localhost:2022/harvester/simulation/6ccf685055898fd8acbabd7dd3702b8643f18a73
 ###
 POST http://localhost:2022/harvester/simulation
 Content-Type: application/json
