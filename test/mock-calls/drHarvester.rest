@@ -2,7 +2,7 @@ POST http://137.204.57.93:7739/harvester/simulation
 Content-Type: application/json
 
 {
-  "devId": "asdasdasd",
+  "devId": "teste",
 	"harvId": "SolarLightLoad",
 	"lowpwrI": 400,
 	"activeI": 715,
@@ -19,10 +19,10 @@ Content-Type: application/json
 	"vibFreq": null
 }
 
-################################
+############ 9a769f70-6f26-4ad7-ba19-f48d89aa69d8
 
 
-GET http://137.204.57.93:7739/harvester/simulation/acb18218-1d5f-4180-950e-80219b27eca0
+GET http://137.204.57.93:7739/harvester/simulation/9a769f70-6f26-4ad7-ba19-f48d89aa69d8
 
 ################################
 POST http://137.204.57.93:7739/harvester/simulation

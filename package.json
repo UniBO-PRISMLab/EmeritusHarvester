@@ -4,7 +4,7 @@
   "description": "Emeritus Harvester caches the simulation results from DrHarvester",
   "main": "src/index.js",
   "scripts": {
-    "start": "node test/populate-db/index.js && node src/index.js"
+    "start": "node src/index.js"
   },
   "author": "Ivan Zyrianoff",
   "license": "ISC",

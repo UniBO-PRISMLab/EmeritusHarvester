@@ -5,8 +5,7 @@ const db = require('../models');
 const Simulation = db.simulations;
 const drHarvesterClient = require('../client/drHarvester.client');
 const hasher = require('../utils/hasher');
-
-
+const recordFile = require('../utils/recordDataPoint');
 exports.simulationPost = async (req, res) => {
   if (!req.body.harvId) {
     res.status(400).send({ message: 'Content can not be empty!' });
@@ -22,26 +21,12 @@ exports.simulationPost = async (req, res) => {
     if (!(await isCached(job.jobId))) {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
       storeSimulation(req.body);
+      console.log(simulation);
+      if (simulation.experimentName) recordFile(simulation.experimentName, 0);
     } else {
       logger.info('simulation found: ' + job.jobId);
+      if (simulation.experimentName) recordFile(simulation.experimentName, 1);
     }
-    res.status(200).send(job);
-  } catch (err) {
-    res.status(503).send({ error: err });
-  }
-};
-
-exports.simulationHash = async (req, res) => {
-  if (!req.body.harvId) {
-    res.status(400).send({ message: 'Content can not be empty!' });
-    return;
-  }
-
-  try {
-    const { devId, ...simulation } = req.body;
-    const job = {
-      jobId: hash(simulation),
-    };
     res.status(200).send(job);
   } catch (err) {
     res.status(503).send({ error: err });
@@ -53,8 +38,9 @@ exports.simulationGet = async (req, res) => {
   try {
     const mongoResponse = await Simulation.findById(id);
     if (!mongoResponse) {
-      res.status(404).send({
-        message: `Simulation ${id} not found`,
+      res.status(200).send({
+        terminated: false,
+        result: null,
       });
     } else {
       //console.log('mongo response');
@@ -73,45 +59,15 @@ exports.simulationGet = async (req, res) => {
 const storeSimulation = async (input) => {
   try {
     const simulationId = await drHarvesterClient.postSimulation(input);
-    const simulation = await drHarvesterClient.getSimulationResult(simulationId);
+    const simulation = await drHarvesterClient.getSimulationResult(simulationId, input.isCache);
     logger.info('Simulation ended, hashing it and storing in db');
     const hashedData = await hasher(input, simulation);
     const simulationSchema = new Simulation(hashedData);
     await simulationSchema.save(simulationSchema);
   } catch (error) {
-    console.log('DrHarvester Error ');
+    logger.error('DrHarvester Error ');
+    logger.error(error);
   }
-};
-
-const calculateBatteryyLifetime = (duty, batteryLevel) => {
-  //console.log(`duty: ${duty}, bat: ${batteryLevel}`);
-  let batSOC = (0.6279 * batteryLevel - 1.548) * 100;
-  if (batSOC > 100) batSOC = 100;
-  else if (batSOC < 0) batSOC = 0;
-
-  const misteriousData = -0.424 * 700 + (648 + 5.8 * duty);
-
-  const batlifeh = (3250 * (batSOC / 100)) / Math.abs(misteriousData);
-  console.log(`duty: ${duty}, bat: ${duty} batlifeh ${batlifeh}`);
-
-  return batlifeh;
-};
-
-const calculateSimulation = async (duty, batteryLevel) => {
-  const simulation = {
-    terminated: true,
-    result: {
-      devId: 'fake',
-      harvId: 'SolarHeavyLoad',
-      batState: 0,
-      batlifeh: await calculateBatteryyLifetime(duty, batteryLevel),
-      tChargeh: -1,
-      dSOCrate: -0.938,
-      date: '19-Apr-2022 23:41:47',
-      simStatus: 0,
-    },
-  };
-  return simulation;
 };
 
 const isCached = async (id) => Simulation.findById(id);
