@@ -16,7 +16,7 @@ exports.simulationPost = async (req, res) => {
     const { isCache, experimentName, ...simulation } = req.body;
     //const simulation = req.body;
     const job = {
-      jobId: hash(simulation + new Date()),
+      jobId: hash(Math.random()) + 'first',
     };
 
     if (!(await isCached(hash(simulation)))) {
@@ -24,13 +24,14 @@ exports.simulationPost = async (req, res) => {
       storeSimulation(req.body, job.jobId);
       //console.log('++++++++++++++++++' + experimentName + '++++++++++++++++++');
       if (experimentName) recordFile(experimentName, 0);
+      console.log(job);
       res.status(200).send(job);
     } else {
       logger.info('simulation found: ' + hash(simulation));
       if (experimentName) recordFile(experimentName, 1);
       const response = {
         jobId: hash(simulation),
-      }
+      };
       res.status(200).send(response);
     }
   } catch (err) {
@@ -41,6 +42,7 @@ exports.simulationPost = async (req, res) => {
 exports.simulationGet = async (req, res) => {
   const id = req.params.id;
   try {
+    logger.info(`searching id: ${id}`);
     const mongoResponse = await Simulation.findById(id);
     if (!mongoResponse) {
       res.status(200).send({
@@ -91,16 +93,17 @@ const storeFirst = async (inputData) => {
 const storeSimulation = async (input, hash) => {
   //console.log(input);
   try {
-    storeFirst(input);
-    const simulationId = await drHarvesterClient.postSimulation(input);
+    await storeFirst(input);
+    const simulationId = await drHarvesterClient.postSimulation(input, hash);
     const simulation = await drHarvesterClient.getSimulationResult(simulationId, input.isCache);
-    logger.info('Simulation ended, hashing it and storing in db');
+    logger.info('Simulation ended, hashing it and storing in db, hash: '+ hash);
     const hashedData = await hasher(hash, simulation);
     const simulationSchema = new Simulation(hashedData);
     await simulationSchema.save(simulationSchema);
   } catch (error) {
     logger.error('DrHarvester Error ');
     logger.error(error);
+    process.exit()
   }
 };
 
