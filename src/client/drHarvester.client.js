@@ -36,7 +36,7 @@ const getSimulationResult = async (jobId, isCache = false) => {
     return simulation;
   } catch (err) {
     console.log(err);
-    process.exit();
+    //process.exit();
 
     return new Error(err.message);
   }

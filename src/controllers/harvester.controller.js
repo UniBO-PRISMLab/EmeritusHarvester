@@ -12,21 +12,19 @@ exports.simulationPost = async (req, res) => {
     return;
   }
 
-
-
   try {
     const { isCache, experimentName, devId, ...simulation } = req.body;
-    simulation.phIrr = Math.round(simulation.batSOC / 50) * 50;;
+    simulation.phIrr = Math.round(simulation.batSOC / 50) * 50;
     simulation.batSOC = Math.round(simulation.batSOC / 5) * 5;
     //const simulation = req.body;
     const job = {
       jobId: hash(Math.random()) + 'first',
     };
-
+    console.log(simulation);
     if (!(await isCached(hash(simulation)))) {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
-      await storeFirst(req.body);
-      storeSimulation(req.body, job.jobId);
+      await storeFirst(simulation);
+      storeSimulation(simulation, isCache, job.jobId);
       //console.log('++++++++++++++++++' + experimentName + '++++++++++++++++++');
       if (experimentName) recordFile(experimentName, 0);
       res.status(200).send(job);
@@ -83,8 +81,8 @@ const mockSimulation = {
 const storeFirst = async (inputData) => {
   logger.info('storing mock simulation');
   try {
-    const { isCache, experimentName, ...input } = inputData;
-    const hashedData = await hasher(hash(input), mockSimulation);
+    //const { isCache, experimentName, ...input } = inputData;
+    const hashedData = await hasher(hash(inputData), mockSimulation);
     const simulationSchema = new Simulation(hashedData);
     await simulationSchema.save(simulationSchema);
   } catch (error) {
@@ -94,11 +92,11 @@ const storeFirst = async (inputData) => {
 };
 
 //TODO: move this to another file
-const storeSimulation = async (input, hash) => {
+const storeSimulation = async (input, isCache, hash) => {
   //console.log(input);
   try {
     const simulationId = await drHarvesterClient.postSimulation(input, hash);
-    const simulation = await drHarvesterClient.getSimulationResult(simulationId, input.isCache);
+    const simulation = await drHarvesterClient.getSimulationResult(simulationId, isCache);
     logger.info('Simulation ended, hashing it and storing in db, hash: ' + hash);
     const hashedData = await hasher(hash, simulation);
     const simulationSchema = new Simulation(hashedData);
@@ -106,7 +104,6 @@ const storeSimulation = async (input, hash) => {
   } catch (error) {
     logger.error('DrHarvester Error ');
     logger.error(error);
-    process.exit();
   }
 };
 
