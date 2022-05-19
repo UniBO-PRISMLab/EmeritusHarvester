@@ -2,11 +2,11 @@
 //Duty: 35 - batV: 2.55
 //cea877bb-1d63-4cf3-8c88-eccec0729234
 ###
-POST http://192.168.1.3:2022/harvester/simulation
+POST http://localhost:2022/harvester/simulation
 Content-Type: application/json
 
 {
-  "devId": "restaare",
+  "devId": "teste",
 	"harvId": "SolarHeavyLoad",
 	"lowpwrI": 400,
 	"activeI": 715,
@@ -22,13 +22,13 @@ Content-Type: application/json
 	"vibAcc": null,
 	"vibFreq": null,
   "experimentName": "asdasdtest",
-  "isCache": false
+  "isCache": true
 }
 
 
 ###
 
-GET http://192.168.1.3:2022/harvester/simulation/acfba6417182d1b2411ce0ca2a5836f676ce365e
+GET http://192.168.1.3:2022/harvester/simulation/75e4e6f9a6640f641e490654eaed21483f25eaf6
 ###
 POST http://localhost:2022/harvester/simulation
 Content-Type: application/json

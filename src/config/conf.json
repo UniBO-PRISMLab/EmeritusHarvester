@@ -3,7 +3,7 @@
     "port": 2022
   },
   "drHarvester": {
-    "host": "137.204.143.89",
+    "host": "localhost",
     "port": 7739
   },
   "mongo": {
