@@ -21,10 +21,10 @@ exports.simulationPost = async (req, res) => {
 
     if (!(await isCached(hash(simulation)))) {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
+      await storeFirst(req.body);
       storeSimulation(req.body, job.jobId);
       //console.log('++++++++++++++++++' + experimentName + '++++++++++++++++++');
       if (experimentName) recordFile(experimentName, 0);
-      console.log(job);
       res.status(200).send(job);
     } else {
       logger.info('simulation found: ' + hash(simulation));
@@ -93,17 +93,16 @@ const storeFirst = async (inputData) => {
 const storeSimulation = async (input, hash) => {
   //console.log(input);
   try {
-    await storeFirst(input);
     const simulationId = await drHarvesterClient.postSimulation(input, hash);
     const simulation = await drHarvesterClient.getSimulationResult(simulationId, input.isCache);
-    logger.info('Simulation ended, hashing it and storing in db, hash: '+ hash);
+    logger.info('Simulation ended, hashing it and storing in db, hash: ' + hash);
     const hashedData = await hasher(hash, simulation);
     const simulationSchema = new Simulation(hashedData);
     await simulationSchema.save(simulationSchema);
   } catch (error) {
     logger.error('DrHarvester Error ');
     logger.error(error);
-    process.exit()
+    process.exit();
   }
 };
 
