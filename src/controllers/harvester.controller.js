@@ -16,6 +16,8 @@ exports.simulationPost = async (req, res) => {
     const { isCache, experimentName, devId, ...simulation } = req.body;
     simulation.phIrr = Math.round(simulation.batSOC / 50) * 50;
     simulation.batSOC = Math.round(simulation.batSOC / 5) * 5;
+    simulation.duty = Math.round(simulation.duty / 5) * 5;
+
     //const simulation = req.body;
     const job = {
       jobId: hash(Math.random()) + 'first',
