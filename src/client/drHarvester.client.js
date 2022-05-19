@@ -4,13 +4,16 @@ const config = require('../config/conf.json');
 const logger = require('../config/log');
 const url = `http://${config.drHarvester.host}:${config.drHarvester.port}`;
 
-const postSimulation = async (inputData, hash) => {
+const postSimulation = async (inputData, isCache, hash) => {
   try {
     logger.info(
       `Querying DrHarvester for simulation ${hash} - Duty: ${inputData.duty} - batV: ${inputData.batSOC}`
     );
-    logger.info(inputData)
-    let { data } = await axios.post(`${url}/harvester/simulation`, inputData);
+    logger.info(inputData);
+    let { data } = await axios.post(`${url}/harvester/simulation`, {
+      isCache: isCache,
+      ...inputData,
+    });
     logger.info(`Simulation response of hash ${hash}: ${data.jobId}`);
     return data.jobId;
   } catch (error) {

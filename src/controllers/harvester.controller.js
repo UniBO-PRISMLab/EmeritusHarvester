@@ -18,15 +18,15 @@ exports.simulationPost = async (req, res) => {
     simulation.batSOC = Math.round(simulation.batSOC / 5) * 5;
     simulation.duty = Math.round(simulation.duty / 5) * 5;
 
-    //const simulation = req.body;
+    const hashId = hash(Math.random()) + 'first';
     const job = {
-      jobId: hash(Math.random()) + 'first',
+      jobId: hashId,
     };
     console.log(simulation);
     if (!(await isCached(hash(simulation)))) {
       logger.info(`Simulation not found in cache. Querying DrHarvester...`);
       await storeFirst(simulation);
-      storeSimulation(simulation, isCache, job.jobId);
+      storeSimulation(simulation, isCache, hashId);
       //console.log('++++++++++++++++++' + experimentName + '++++++++++++++++++');
       if (experimentName) recordFile(experimentName, 0);
       res.status(200).send(job);
@@ -97,7 +97,7 @@ const storeFirst = async (inputData) => {
 const storeSimulation = async (input, isCache, hash) => {
   //console.log(input);
   try {
-    const simulationId = await drHarvesterClient.postSimulation(input, hash);
+    const simulationId = await drHarvesterClient.postSimulation(input, isCache, hash);
     const simulation = await drHarvesterClient.getSimulationResult(simulationId, isCache);
     logger.info('Simulation ended, hashing it and storing in db, hash: ' + hash);
     const hashedData = await hasher(hash, simulation);
