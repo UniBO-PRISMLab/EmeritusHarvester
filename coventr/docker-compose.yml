@@ -1,0 +1,28 @@
+version: "3.6"
+
+services:
+  mongo:
+    image: mongo:4.4
+    restart: always
+    volumes:
+      - /var/lib/docker/volumes/emeritus/_data:/data/db
+
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    environment:
+       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017
+
+  emeritus:
+    image: ivanzy/emeritus:latest
+    links:
+      - "mongo:mongo"
+    ports:
+      - "2022:2022"
+    depends_on:
+      - mongo
